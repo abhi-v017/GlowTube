@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../../../components/Navbar";
 import generateService from "../../../services/generateServices";
 import userService from "../../../services/userServices";
@@ -276,9 +277,11 @@ export default function GenerateThumbnail() {
                                     <div key={index} className="border border-gray-200 rounded-lg p-4">
                                         <div className="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
                                             {thumbnail.output?.imageUrl ? (
-                                                <img 
+                                                <Image 
                                                     src={thumbnail.output.imageUrl} 
                                                     alt={`Generated thumbnail ${index + 1}`}
+                                                    width={800}
+                                                    height={450}
                                                     className="max-w-full max-h-full object-contain rounded-lg"
                                                 />
                                             ) : (

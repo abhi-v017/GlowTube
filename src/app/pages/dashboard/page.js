@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -27,6 +27,17 @@ export default function Dashboard() {
         }
     }, [status, userData, router]);
 
+    const refreshUserData = useCallback(async () => {
+        try {
+            const updatedUser = await userService.getCurrentUser();
+            if (updatedUser) {
+                dispatch(updateProfile(updatedUser));
+            }
+        } catch (error) {
+            console.error('Failed to refresh user data:', error);
+        }
+    }, [dispatch]);
+
     useEffect(() => {
         const fetchGenerates = async () => {
             if (!userData) return;
@@ -50,7 +61,7 @@ export default function Dashboard() {
         if (userData) {
             fetchGenerates();
         }
-    }, [userData]);
+    }, [userData, refreshUserData]);
 
     const handleUpgrade = () => {
         setShowPaymentModal(true);
@@ -87,16 +98,6 @@ export default function Dashboard() {
         setSelectedGeneration(null);
     };
 
-    const refreshUserData = async () => {
-        try {
-            const updatedUser = await userService.getCurrentUser();
-            if (updatedUser) {
-                dispatch(updateProfile(updatedUser));
-            }
-        } catch (error) {
-            console.error('Failed to refresh user data:', error);
-        }
-    };
 
     const getPlanColor = (planType) => {
         switch (planType) {

@@ -66,7 +66,7 @@ export default function LoginPage() {
         {error && <span className="text-red-600 text-sm">{error}</span>}
       </form>
       <span className="text-zinc-600">
-        don't have an account?{" "}
+        don&apos;t have an account?{" "}
         <Link className="underline text-blue-700" href="/pages/signup">
           signup
         </Link>

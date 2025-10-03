@@ -18,7 +18,7 @@ export default function NoCreditsModal({ isOpen, onClose }) {
                 <div className="px-6 py-5">
                     <h3 className="text-xl font-semibold text-gray-900">No credits left</h3>
                     <p className="mt-2 text-sm text-gray-600">
-                        You don't have enough credits to continue. Upgrade your plan to get more credits.
+                        You don&apos;t have enough credits to continue. Upgrade your plan to get more credits.
                     </p>
                     <div className="mt-6 flex items-center justify-end gap-3">
                         <button

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function GenerationDetailModal({ isOpen, onClose, generation }) {
     if (!isOpen || !generation) return null;
@@ -147,9 +148,11 @@ export default function GenerationDetailModal({ isOpen, onClose, generation }) {
                                 {generation.type === 'thumbnail' && generation.output?.imageUrl && (
                                     <div className="space-y-4">
                                         <div className="bg-gray-50 rounded-lg p-4">
-                                            <img 
+                                            <Image 
                                                 src={generation.output.imageUrl} 
                                                 alt="Generated thumbnail"
+                                                width={800}
+                                                height={450}
                                                 className="max-w-full h-auto rounded-lg mx-auto"
                                             />
                                         </div>
