@@ -4,7 +4,7 @@ export class GenerateServices{
     async getAllGenerates(){
         const options = {
             method: "GET",
-            url: `http://localhost:5000/api/v1/generates`,
+            url: `https://glowtube-b.onrender.com/api/v1/generates`,
             headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -22,7 +22,7 @@ export class GenerateServices{
     async createGenerates(type, inputData){
         const options = {
             method: "POST",
-            url: `http://localhost:5000/api/v1/generates`,
+            url: `https://glowtube-b.onrender.com/api/v1/generates`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
@@ -63,7 +63,7 @@ export class GenerateServices{
     async getGeneratesById(id){
         const options = {
             method: "POST",
-            url: `http://localhost:5000/api/v1/generates/${id}`,
+            url: `https://glowtube-b.onrender.com/api/v1/generates/${id}`,
             headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`

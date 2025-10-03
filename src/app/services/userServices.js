@@ -3,13 +3,13 @@ import axios from "axios";
 export class UserServices {
 
     getApiBaseUrl() {
-        return 'http://localhost:5000';
+        return 'https://glowtube-b.onrender.com';
     }
 
     async register(email, password) {
         const options = {
             method: "POST",
-            url: `http://localhost:5000/api/v1/users/register`,
+            url: `https://glowtube-b.onrender.com/api/v1/users/register`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json'
@@ -29,7 +29,7 @@ export class UserServices {
     async login(email, password) {
         const options = {
             method: "POST",
-            url: `http://localhost:5000/api/v1/users/login`,
+            url: `https://glowtube-b.onrender.com/api/v1/users/login`,
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json'
@@ -74,7 +74,7 @@ export class UserServices {
     async getCurrentUser() {
         const options = {
             method: "GET",
-            url: `http://localhost:5000/api/v1/users/current`,
+            url: `https://glowtube-b.onrender.com/api/v1/users/current`,
             headers: {
                 accept: 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
