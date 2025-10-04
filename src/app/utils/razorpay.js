@@ -13,7 +13,7 @@ export const loadRazorpayScript = () => {
 export const createSubscription = async (planKey, userToken) => {
   try {
     // Call your backend to create subscription
-    const response = await fetch(`hhttps://glowtube-b.onrender.com/api/v1/payments/create-subscription`, {
+    const response = await fetch(`https://glowtube-b.onrender.com/api/v1/payments/create-subscription`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
