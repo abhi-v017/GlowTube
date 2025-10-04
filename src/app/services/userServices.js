@@ -1,5 +1,25 @@
 import axios from "axios";
 
+// Helper function to retry requests with exponential backoff for Render free tier
+const retryRequest = async (requestFn, maxRetries = 3, baseDelay = 2000) => {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            return await requestFn();
+        } catch (error) {
+            console.log(`Attempt ${attempt} failed:`, error.message);
+            
+            if (attempt === maxRetries) {
+                throw error;
+            }
+            
+            // Exponential backoff: 2s, 4s, 8s
+            const delay = baseDelay * Math.pow(2, attempt - 1);
+            console.log(`Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+};
+
 export class UserServices {
 
     getApiBaseUrl() {
@@ -79,15 +99,13 @@ export class UserServices {
                 accept: 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             },
+            timeout: 120000 // 2 minutes timeout for Render free tier
         }
 
-        try {
+        return retryRequest(async () => {
             const response = await axios(options);
             return response?.data?.data || null;
-        } catch (error) {
-            console.log('failed to get current user', error);
-            return null;
-        }
+        });
     }
 }
 

@@ -254,7 +254,7 @@ export default function GenerateThumbnail() {
                                 disabled={loading || userData.creditsLeft <= 0}
                                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                             >
-                                {loading ? "Generating..." : "Generate Thumbnail"}
+                                {loading ? "Generating... (This may take up to 2 minutes on free tier)" : "Generate Thumbnail"}
                             </button>
                         </form>
                     </div>
