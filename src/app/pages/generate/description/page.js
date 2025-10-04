@@ -86,12 +86,19 @@ export default function GenerateDescription() {
             });
 
             if (response) {
-                setGeneratedDescriptions(prev => [response, ...prev]);
-                // Refresh user data to get updated credits
-                const updatedUser = await userService.getCurrentUser();
-                if (updatedUser) {
-                    dispatch(updateProfile(updatedUser));
+                // Check if response includes updated credits (new backend response format)
+                if (response.updatedCredits !== undefined) {
+                    // Immediately update credits in Redux store
+                    dispatch(updateProfile({ ...userData, creditsLeft: response.updatedCredits }));
+                } else {
+                    // Fallback: Refresh user data to get updated credits
+                    const updatedUser = await userService.getCurrentUser();
+                    if (updatedUser) {
+                        dispatch(updateProfile(updatedUser));
+                    }
                 }
+                
+                setGeneratedDescriptions(prev => [response.generate || response, ...prev]);
                 setError("");
             } else {
                 setError("Failed to generate description. Please try again.");

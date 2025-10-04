@@ -83,25 +83,32 @@ export default function PricingPage() {
     const handlePaymentSuccess = async (paymentResponse) => {
         console.log('Payment successful:', paymentResponse);
         
-        // Show immediate success message
-        alert('Payment successful! Your account is being upgraded. Please wait a moment for the changes to reflect.');
-        
         // Close modal immediately
         setShowPaymentModal(false);
         
-        // Wait a bit for webhook to process, then refresh user data
-        setTimeout(async () => {
-            try {
-                const updatedUser = await userService.getCurrentUser();
-                if (updatedUser) {
-                    dispatch(updateProfile(updatedUser));
-                    alert('Account successfully upgraded! Your new plan and credits are now active.');
+        // Check if we have immediate payment confirmation data
+        if (paymentResponse.userData) {
+            // Update user data immediately with confirmed payment info
+            dispatch(updateProfile(paymentResponse.userData));
+            alert(`Account successfully upgraded to ${paymentResponse.userData.planType.toUpperCase()}! You now have ${paymentResponse.userData.creditsLeft} credits.`);
+        } else {
+            // Fallback: Show success message and try to refresh user data
+            alert('Payment successful! Your account is being upgraded...');
+            
+            // Wait a bit for webhook to process, then refresh user data
+            setTimeout(async () => {
+                try {
+                    const updatedUser = await userService.getCurrentUser();
+                    if (updatedUser) {
+                        dispatch(updateProfile(updatedUser));
+                        alert('Account successfully upgraded! Your new plan and credits are now active.');
+                    }
+                } catch (e) {
+                    console.error('Failed to refresh user data:', e);
+                    alert('Payment was successful, but there was an issue updating your account. Please refresh the page.');
                 }
-            } catch (e) {
-                console.error('Failed to refresh user data:', e);
-                alert('Payment was successful, but there was an issue updating your account. Please refresh the page.');
-            }
-        }, 3000); // Wait 3 seconds for webhook processing
+            }, 3000); // Wait 3 seconds for webhook processing
+        }
     };
 
     return (

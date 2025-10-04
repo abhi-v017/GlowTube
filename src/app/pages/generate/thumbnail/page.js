@@ -83,12 +83,19 @@ export default function GenerateThumbnail() {
             });
 
             if (response) {
-                setGeneratedThumbnails(prev => [response, ...prev]);
-                // Refresh user data to get updated credits
-                const updatedUser = await userService.getCurrentUser();
-                if (updatedUser) {
-                    dispatch(updateProfile(updatedUser));
+                // Check if response includes updated credits (new backend response format)
+                if (response.updatedCredits !== undefined) {
+                    // Immediately update credits in Redux store
+                    dispatch(updateProfile({ ...userData, creditsLeft: response.updatedCredits }));
+                } else {
+                    // Fallback: Refresh user data to get updated credits
+                    const updatedUser = await userService.getCurrentUser();
+                    if (updatedUser) {
+                        dispatch(updateProfile(updatedUser));
+                    }
                 }
+                
+                setGeneratedThumbnails(prev => [response.generate || response, ...prev]);
                 setError("");
             } else {
                 setError("Failed to generate thumbnail. Please try again.");

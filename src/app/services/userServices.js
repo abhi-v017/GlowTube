@@ -107,6 +107,24 @@ export class UserServices {
             return response?.data?.data || null;
         });
     }
+
+    // Fast payment confirmation - call this immediately after payment
+    async confirmPayment() {
+        const options = {
+            method: "POST",
+            url: `https://glowtube-b.onrender.com/api/v1/payments/confirm-payment`,
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            timeout: 30000 // 30 seconds timeout for payment confirmation
+        }
+
+        return retryRequest(async () => {
+            const response = await axios(options);
+            return response?.data?.data || null;
+        });
+    }
 }
 
 const userService = new UserServices();

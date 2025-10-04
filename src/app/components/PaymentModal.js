@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { createSubscription, handleRazorpayPayment, getPlanDetails } from "../utils/razorpay";
+import userService from "../services/userServices";
 
 export default function PaymentModal({ isOpen, onClose, planId, user, onSuccess }) {
     const [loading, setLoading] = useState(false);
@@ -28,8 +29,28 @@ export default function PaymentModal({ isOpen, onClose, planId, user, onSuccess 
             user.name || user.email
         );
 
-        // Payment successful
-        onSuccess(paymentResponse);
+        // Payment successful - try to get immediate confirmation
+        try {
+            // Wait a moment for webhook to process, then check payment status
+            setTimeout(async () => {
+                try {
+                    const paymentStatus = await userService.confirmPayment();
+                    if (paymentStatus) {
+                        console.log('Payment confirmed:', paymentStatus);
+                        // Pass the updated user data to onSuccess
+                        onSuccess({ ...paymentResponse, userData: paymentStatus });
+                    } else {
+                        onSuccess(paymentResponse);
+                    }
+                } catch (confirmError) {
+                    console.log('Payment confirmation failed, using basic success:', confirmError);
+                    onSuccess(paymentResponse);
+                }
+            }, 2000); // Wait 2 seconds for webhook to process
+        } catch (error) {
+            onSuccess(paymentResponse);
+        }
+        
         onClose();
         
         } catch (error) {
